@@ -14,7 +14,6 @@ import ws.models.App;
 public class Main {
 
     public static void main(String[] args) {
-
       App.websocketMain(args);
 
       Gson gson = new Gson();

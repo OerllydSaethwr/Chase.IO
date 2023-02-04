@@ -196,6 +196,7 @@ public class WebsocketClient extends WebSocketListener {
   @SneakyThrows(JsonProcessingException.class)
   public void onMessage(@NotNull WebSocket socket, @NotNull String text) {
     System.out.println(text);
+
     logger.debug("Raw message received: {}", text);
     // Deserialise the payload from JSON into a java Object
     WebsocketPayload parsedPayload = objectMapper.readValue(text, WebsocketPayload.class);
@@ -225,10 +226,11 @@ public class WebsocketClient extends WebSocketListener {
       );
       JsonNode dataNode = parsedPayload.getData();
       JsonNode heartDataNode = dataNode.get("heart_data");
-      JsonNode heatRateDataNode = dataNode.get("heart_rate_data");
-      JsonNode heartRateSummaryNode = dataNode.get("summary");
-      JsonNode avgHrBpm = dataNode.get("avg_hr_bpm");
+      JsonNode heatRateDataNode = heartDataNode.get("heart_rate_data");
+      JsonNode heartRateSummaryNode = heatRateDataNode.get("summary");
+      JsonNode avgHrBpm = heartRateSummaryNode.get("avg_hr_bpm");
       int bpm = avgHrBpm.asInt();
+
       System.out.println("the heart rate is " + bpm);
 
     }
