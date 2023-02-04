@@ -52,7 +52,7 @@ public class Player {
     updateRadius();
   }
   private void updateRadius() {
-    radius += points / (double) 10 + INIT_SIZE;
+    radius = points / (double) 10 + INIT_SIZE;
   }
 
   public boolean updateTimestamp() {
