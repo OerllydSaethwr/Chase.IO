@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
 import spark.Spark;
 import spark.Spark.*;
 import com.google.gson.*;
@@ -30,8 +32,8 @@ public class Main {
         try {
           System.out.println(req.body());
           Player player = gson.fromJson(req.body(), Player.class);
-          game.getPlayers().get(player.getName()).updateLocation(player.coord.latitude, player.coord.longitude);
-          GameRespond gr = new GameRespond(game.withinRange(player), game.getPickups());
+          game.getPlayers().get(player.getName()).updateLocation(player.getCoord().latitude, player.getCoord().longitude);
+          GameRespond gr = new GameRespond(new ArrayList(game.getPlayers().values()), game.getPickups());
           String ret = gson.toJson(gr, GameRespond.class);
           return ret;
         } catch (Exception e) {

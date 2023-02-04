@@ -2,7 +2,9 @@ package org.example;
 
 
 import com.google.gson.annotations.SerializedName;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 
 public class Player {
@@ -13,13 +15,22 @@ public class Player {
   private static double INIT_SIZE = 1;
   private static double POINT_THRESHHOLD = 50;
   private static double MIN_HEARTRATE = 100;
-  @SerializedName("location")
+  @SerializedName("coordinate")
   Location coord;
+  private long timestamp;
+
+  private String uuid;
+
+  private FitnessData fitnessData;
+  private Date date = new Date();
 
   public Player(String name) {
+    this.uuid = UUID.randomUUID().toString();
     this.radius = INIT_SIZE;
     this.points = 0;
     this.name = name;
+
+    this.timestamp = date.getTime();
   }
 
   public void claimPickups(List<Pickup> pickups, Game game) {
@@ -56,6 +67,8 @@ public class Player {
   public String getName() {
     return name;
   }
+
+  public long getTimstamp() {return timestamp;}
 
   public void takeDamage(double points) {
     points -= points;

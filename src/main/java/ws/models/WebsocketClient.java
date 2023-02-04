@@ -222,6 +222,7 @@ public class WebsocketClient extends WebSocketListener {
       logger.info("Received DISPATCH payload for user ID {} of type {}. Data is: {}",
           parsedPayload.getUserId(), parsedPayload.getEventType(), parsedPayload.getData().toString()
       );
+
     }
   }
 

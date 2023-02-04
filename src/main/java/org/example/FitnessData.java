@@ -1,6 +1,6 @@
 package org.example;
 
-public class ApiData {
+public class FitnessData {
   private int heartRate;
 
   public void startTracking() {
@@ -11,7 +11,7 @@ public class ApiData {
 
   }
 
-  public int setHeartRate(int heartRate) {
+  public void setHeartRate(int heartRate) {
     this.heartRate = heartRate;
   }
 

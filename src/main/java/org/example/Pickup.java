@@ -1,8 +1,11 @@
 package org.example;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Pickup {
     private final int points;
     private final double radius;
+    @SerializedName("coordinate")
     private Location coord;
 
     public Pickup (int points, double radius, Location coord) {

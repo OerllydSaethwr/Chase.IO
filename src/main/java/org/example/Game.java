@@ -1,5 +1,9 @@
 package org.example;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,10 +60,46 @@ public class Game {
     pickups.add(new Pickup(point, radius, new Location(latitude, longitude)));
   }
 
+  public Location getAverageLocation() {
+    double latitude = 0;
+    double longitude = 0;
+    for (Player p : players.values()) {
+      Location coord = p.getCoord();
+      latitude += coord.latitude;
+      longitude += coord.longitude;
+    }
+    latitude /= players.size();
+    longitude /= players.size();
+
+    return new Location(latitude, longitude);
+  }
+
+  public double getZoneRadius(Location centre) {
+    double radius = 0;
+    for (Player p : players.values()) {
+      radius = Math.min(radius, centre.distanceTo(p.getCoord()));
+    }
+
+    return radius;
+  }
+
+  public Location getRandomLocationWithinZone() {
+    Location centre = getAverageLocation();
+    double zoneRadius = getZoneRadius(centre);
+
+    double randomRadius = zoneRadius * Math.sqrt(random.nextDouble());
+    double theta = random.nextDouble() * 2 * PI;
+
+    double latitude = centre.latitude + randomRadius * sin(theta);
+    double longitude = centre.longitude + randomRadius * cos(theta);
+
+    return new Location(latitude, longitude);
+  }
+
   public List<Player> withinRange(Player player) {
     List<Player> retValue = new ArrayList<Player>();
     for (Player p : players.values()) {
-      if (player.coord.distanceTo(p.coord) <= player.getRadius()) {
+      if (player.getCoord().distanceTo(p.getCoord()) <= player.getRadius()) {
         retValue.add(p);
       }
     }
@@ -95,6 +135,8 @@ public class Game {
   public void updateTime() {
     secondsRemaining -= 1 / (double)TICK_RATE;
   }
+
+
 
 
 }
