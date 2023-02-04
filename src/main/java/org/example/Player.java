@@ -55,6 +55,15 @@ public class Player {
     radius += points / (double) 10 + INIT_SIZE;
   }
 
+  public boolean updateTimestamp() {
+    long ts = date.getTime();
+    if (ts - timestamp < 20000) {
+      this.timestamp = ts;
+      return true;
+    }
+    return false;
+  }
+
   public double getRadius() {
     return radius;
   }

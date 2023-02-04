@@ -1,6 +1,7 @@
 package ws.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import okhttp3.*;
@@ -222,9 +223,42 @@ public class WebsocketClient extends WebSocketListener {
       logger.info("Received DISPATCH payload for user ID {} of type {}. Data is: {}",
           parsedPayload.getUserId(), parsedPayload.getEventType(), parsedPayload.getData().toString()
       );
+      JsonNode dataNode = parsedPayload.getData();
+      JsonNode heartDataNode = dataNode.get("heart_data");
+      JsonNode heatRateDataNode = dataNode.get("heart_rate_data");
+      JsonNode heartRateSummaryNode = dataNode.get("summary");
+      JsonNode avgHrBpm = dataNode.get("avg_hr_bpm");
+      int bpm = avgHrBpm.asInt();
+      System.out.println("the heart rate is " + bpm);
 
     }
   }
+
+  /*
+    "heart_data": {
+        "afib_classification_samples": [],
+        "pulse_wave_velocity_samples": [],
+        "ecg_signal": [],
+        "heart_rate_data": {
+          "summary": {
+            "avg_hr_bpm": null,
+            "user_max_hr_bpm": null,
+            "avg_hrv_rmssd": null,
+            "max_hr_bpm": null,
+            "resting_hr_bpm": null,
+            "min_hr_bpm": null,
+            "hr_zone_data": [],
+            "avg_hrv_sdnn": null
+          },
+          "detailed": {
+            "hrv_samples_sdnn": [],
+            "hr_samples": [],
+            "hrv_samples_rmssd": []
+          }
+        }
+      },
+
+   */
 
   /**
    * Fetches the authentication token and creates the connection

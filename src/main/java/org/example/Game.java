@@ -14,7 +14,6 @@ import java.util.Random;
 public class Game {
 
   private final List<Pickup> pickups;
-  //private final List<Player> players;
   private Map<String, Player> players;
   private Random random;
 
@@ -22,10 +21,15 @@ public class Game {
 
   private static int TICK_RATE = 10;
 
+  private final Zone zone;
+
+  private static final int MAX_PICKUPS = 10;
+
   public Game () {
     this.pickups = new ArrayList<>();
     this.players = new HashMap<>();
     this.random = new Random();
+    this.zone = new Zone();
   }
 
   public Map<String, Player> getPlayers() {
@@ -40,60 +44,21 @@ public class Game {
     players.put(p.getName(), p);
   }
 
-  public void generatePickups(int num) {
-    for (int i = 1; i <= num; i++) {
-        generatePickup();
-      }
+  public void generatePickups() {
+    while (pickups.size() < MAX_PICKUPS) {
+      generatePickup();
     }
+  }
 
 
   public void generatePickup(){
     int point = 100;
     double max = 10.0;
     double radius;
-    double latitude;
-    double longitude;
+    Location pickupLocation = zone.getRandomLocation();
     point = random.nextInt(point);
     radius = random.nextDouble() * max;
-    latitude = random.nextDouble() * max;
-    longitude = random.nextDouble() * max;
-    pickups.add(new Pickup(point, radius, new Location(latitude, longitude)));
-  }
-
-  public Location getAverageLocation() {
-    double latitude = 0;
-    double longitude = 0;
-    for (Player p : players.values()) {
-      Location coord = p.getCoord();
-      latitude += coord.latitude;
-      longitude += coord.longitude;
-    }
-    latitude /= players.size();
-    longitude /= players.size();
-
-    return new Location(latitude, longitude);
-  }
-
-  public double getZoneRadius(Location centre) {
-    double radius = 0;
-    for (Player p : players.values()) {
-      radius = Math.min(radius, centre.distanceTo(p.getCoord()));
-    }
-
-    return radius;
-  }
-
-  public Location getRandomLocationWithinZone() {
-    Location centre = getAverageLocation();
-    double zoneRadius = getZoneRadius(centre);
-
-    double randomRadius = zoneRadius * Math.sqrt(random.nextDouble());
-    double theta = random.nextDouble() * 2 * PI;
-
-    double latitude = centre.latitude + randomRadius * sin(theta);
-    double longitude = centre.longitude + randomRadius * cos(theta);
-
-    return new Location(latitude, longitude);
+    pickups.add(new Pickup(point, radius, pickupLocation));
   }
 
   public List<Player> withinRange(Player player) {
@@ -118,11 +83,26 @@ public class Game {
     }
   }
 
+
+  public void updateTimestamps(Player player) {
+
+      if (!player.updateTimestamp()) {
+        players.remove(player.getName());
+      }
+  }
+
+
+
   public void tick() {
+
     for (Player player : players.values()) {
       //player.updateLocation(0.0,0.0);
       player.claimPickups(pickups, this);
+
     }
+
+    zone.update(players);
+    generatePickups();
 
     duel();
     updateTime();
@@ -136,7 +116,8 @@ public class Game {
     secondsRemaining -= 1 / (double)TICK_RATE;
   }
 
-
-
+  public void updatePlayerLocation(Player player) {
+    players.get(player.getName()).updateLocation(player.getCoord().latitude, player.getCoord().longitude);
+  }
 
 }

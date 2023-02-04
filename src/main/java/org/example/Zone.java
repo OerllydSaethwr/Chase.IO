@@ -15,9 +15,7 @@ public class Zone {
 
   private Random random;
 
-  public Zone(double radius, Location centre) {
-    this.radius = radius;
-    this.centre = centre;
+  public Zone() {
     this.random = new Random();
   }
 
