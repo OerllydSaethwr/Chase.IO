@@ -33,5 +33,4 @@ public class Location {
     double nauticalMiles = 60 * Math.toDegrees(angle);
     return nauticalMiles * 1852;
   }
-
 }
