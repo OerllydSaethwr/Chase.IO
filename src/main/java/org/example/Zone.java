@@ -53,7 +53,7 @@ public class Zone {
   private void updateRadius(Location centre, Map<String, Player> players) {
     double radius = 0;
     for (Player p : players.values()) {
-      radius = Math.min(radius, centre.distanceTo(p.getCoord()));
+      radius = Math.max(radius, centre.distanceTo(p.getCoord()));
     }
 
     this.radius = radius;

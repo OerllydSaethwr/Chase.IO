@@ -7,8 +7,7 @@ public class Location {
   // create and initialize a point with given name and
   // (latitude, longitude) specified in degrees
   public Location(double latitude, double longitude) {
-    this.latitude  = latitude;
-    this.longitude = longitude;
+    updateLocation(latitude, longitude);
   }
 
   public void updateLocation(double latitude, double longitude) {
@@ -31,6 +30,6 @@ public class Location {
 
     // each degree on a great circle of Earth is 60 nautical miles
     double nauticalMiles = 60 * Math.toDegrees(angle);
-    return nauticalMiles * 1852;
+    return nauticalMiles / 1852;
   }
 }

@@ -101,8 +101,10 @@ public class Game {
 
     }
 
-    zone.update(players);
-    generatePickups();
+    if (players.size() > 0) {
+      zone.update(players);
+      generatePickups();
+    }
 
     duel();
     updateTime();
