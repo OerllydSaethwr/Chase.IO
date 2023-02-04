@@ -3,9 +3,11 @@ package org.example;
 import spark.Spark;
 import spark.Spark.*;
 
+
 public class Main {
     public static void main(String[] args) {
-        Spark.get("/hello", (req, res) -> "Hello World");
-        Spark.get("/bye", (req, res) -> "bye World");
+        Spark.post("/start_game", (req, res) -> {
+             System.out.println(req.attributes());
+        });
     }
 }
