@@ -143,6 +143,9 @@ public class Player {
   public void setHeartRate(int heartRate) {
     this.heartRate = heartRate;
     updateOnFire();
+    if (heartRateTrack == null) {
+      heartRateTrack = new ArrayList<>();
+    }
     heartRateTrack.add(heartRate);
   }
 
