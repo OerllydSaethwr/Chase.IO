@@ -139,6 +139,9 @@ public class Player {
   public Boolean getTeam() {
     return team;
   }
+  public int getHeartRate() {
+    return heartRate;
+  }
 
   public void setHeartRate(int heartRate) {
     this.heartRate = heartRate;

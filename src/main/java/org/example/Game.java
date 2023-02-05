@@ -176,6 +176,24 @@ public class Game {
     duel();
     destroyClaimedPickups();
     updateTime();
+    //mockHeartRates();
+  }
+
+  public void mockHeartRate(String id) {
+    Player player = players.get(id);
+    if (player == null || player.getHeartRate() > 0) {
+      return;
+    }
+    int bpm = player.getHeartRate();
+    int nextBpm = Math.max(60, bpm + random.nextInt(4) - 2);
+    setHeartRate(id, nextBpm);
+  }
+
+  private void mockHeartRates() {
+    for (Player player : players.values()) {
+      String id = player.getUuid();
+      mockHeartRate(id);
+    }
   }
 
   public synchronized void updateTime() {
@@ -186,3 +204,4 @@ public class Game {
     players.get(player.getUuid()).updateLocation(player.getCoord().latitude, player.getCoord().longitude);
   }
 }
+;
