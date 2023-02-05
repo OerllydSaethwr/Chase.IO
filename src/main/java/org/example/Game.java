@@ -28,7 +28,7 @@ public class Game {
 
   private final Zone zone;
 
-  private static final int MAX_PICKUPS = 10;
+  private static final int MAX_PICKUPS = 20;
 
   private long tick_id = 0;
 
@@ -55,7 +55,9 @@ public class Game {
 
   public void setHeartRate(String id, int bpm) {
     Player player = players.get(id);
-    player.setHeartRate(bpm);
+    if (player != null) {
+      player.setHeartRate(bpm);
+    }
   }
 
   public Map<String, Player> getPlayers() {
@@ -67,11 +69,7 @@ public class Game {
   }
 
   public void addPlayer(Player p) {
-    if (players.size() == 0) {
-      p.absorb(100);
-    } else if (players.size() == 1) {
-      p.absorb(200);
-    }
+    p.absorb(10);
 
     players.put(p.getUuid(), p);
     if (mode == GameMode.TEAMS) {
@@ -100,7 +98,7 @@ public class Game {
   }
 
   public void generatePickup(){
-    int point = 100;
+    int point = 50;
     double max = 10.0;
     double radius;
     Location pickupLocation = zone.getRandomLocation();
@@ -172,7 +170,7 @@ public class Game {
       player.passiveLoss();
     }
 
-    int minPlayers = 1;
+    int minPlayers = 2;
 
     if (players.size() >= minPlayers) {
       zone.update(players);

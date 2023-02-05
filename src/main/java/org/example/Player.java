@@ -29,8 +29,6 @@ public class Player {
 
   private String uuid;
 
-  private FitnessData fitnessData;
-
   private boolean onFire;
 
   public Player(String name) {
@@ -108,7 +106,7 @@ public class Player {
   }
 
   public void passiveLoss() {
-    if (heartRate < MIN_HEARTRATE) {
+    if (heartRate != 0 && heartRate < MIN_HEARTRATE) {
       points *= 0.99;
     }
   }
