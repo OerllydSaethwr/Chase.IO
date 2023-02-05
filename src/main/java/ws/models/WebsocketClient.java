@@ -6,9 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import okhttp3.*;
 import org.example.Game;
-import ws.models.Opcode;
-import ws.models.TokenResponseBody;
-import ws.models.WebsocketPayload;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -222,21 +219,27 @@ public class WebsocketClient extends WebSocketListener {
       logger.info("Connection is READY");
     } else if (parsedPayload.getOpcode().equals(Opcode.DISPATCH)) {
       // We have been sent some data from a producer connection. Do any processing here
-//      logger.info("Received DISPATCH payload for user ID {} of type {}. Data is: {}",
-//          parsedPayload.getUserId(), parsedPayload.getEventType(), parsedPayload.getData().toString()
-//      );
-      logger.info("DISPATCH!!!!!");
-      JsonNode dataNode = parsedPayload.getData();
-      String userID = parsedPayload.getUserId();
-
-      JsonNode heatRateDataNode = dataNode.get("heart_rate_data");
-      JsonNode heartRateSummaryNode = heatRateDataNode.get("summary");
-      JsonNode avgHrBpmNode = heartRateSummaryNode.get("avg_hr_bpm");
-      int bpm = avgHrBpmNode.asInt();
-      Game game = Game.getInstance();
-      game.setHeartRate(userID, bpm);
-
-      logger.info("the heart rate is " + bpm);
+      logger.info("Received DISPATCH payload for user ID {} of type {}. Data is: {}",
+          parsedPayload.getUserId(), parsedPayload.getEventType(), parsedPayload.getData().toString()
+      );
+      try {
+        JsonNode dataNode = parsedPayload.getData();
+        String userID = parsedPayload.getUserId();
+        // JsonNode measurementsDataNode = dataNode.get("measurements_data");
+        // JsonNode measurementsNode = measurementsDataNode.get("measurements");
+        // JsonNode heartDataNode = measurementsNode.get("heart_data");
+        // JsonNode heartRateDataNode = heartDataNode.get("heart_rate_data");
+        // JsonNode heartRateSummaryNode = heartRateDataNode.get("summary");
+        // JsonNode avgHrBpmNode = heartRateSummaryNode.get("avg_hr_bpm");
+        // int bpm = avgHrBpmNode.asInt();
+        int bpm = dataNode.get("val").asInt();
+        logger.info("the heart rate is " + bpm);
+        System.out.println("userID: " + userID);
+        Game game = Game.getInstance();
+        game.setHeartRate(userID, bpm);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
 
 /*
       JsonNode movementDataNode = dataNode.get("movement_data");

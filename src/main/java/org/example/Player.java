@@ -18,7 +18,10 @@ public class Player {
   private static final int FIRE_HEARTRATE_THRESHOLD = 140;
   private static final int FIRE_BONUS = 1;
   private int heartRate;
-  private double avgSpeed;
+  private boolean isDefending;
+  private boolean isAttacking;
+
+  private Boolean team;
   private List<Integer> heartRateTrack;
   @SerializedName("coordinate")
   Location coord;
@@ -37,6 +40,15 @@ public class Player {
     this.name = name;
     this.heartRateTrack = new ArrayList<>();
     this.timestamp = 0;
+    this.team = null;
+  }
+
+  public void setTeam(Boolean team) {
+    this.team = team;
+  }
+
+  public String getUuid() {
+    return uuid;
   }
 
   public synchronized void claimPickups(List<Pickup> pickups, Game game) {
@@ -56,6 +68,7 @@ public class Player {
   public void absorb(int points) {
     this.points += points;
     updateRadius();
+    isAttacking = true;
   }
   private void updateRadius() {
     radius = points / (double) 10 + INIT_SIZE;
@@ -91,6 +104,7 @@ public class Player {
       this.points = 0;
     }
     updateRadius();
+    isDefending = true;
   }
 
   public void passiveLoss() {
@@ -122,6 +136,10 @@ public class Player {
       this.absorb(absorbAmount);
       player2.takeDamage(absorbAmount);
     }
+  }
+
+  public Boolean getTeam() {
+    return team;
   }
 
   public void setHeartRate(int heartRate) {

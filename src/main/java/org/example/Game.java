@@ -16,8 +16,10 @@ public class Game {
   private final List<Pickup> pickups;
   private final List<Pickup> pickupsToDestroy;
   private final Map<String, Player> players;
+  private int numTeam1 = 0;
+  private int numTeam2 = 0;
   private final Random random;
-  private GameMode mode;
+  private GameMode mode = GameMode.SOLO;
 
   private double secondsRemaining;
   private static final double DEFAULT_GAME_LENGTH = 60;
@@ -47,6 +49,10 @@ public class Game {
     this.secondsRemaining = secondsRemaining;
   }
 
+  public void setGame(GameMode mode) {
+    this.mode = mode;
+  }
+
   public void setHeartRate(String id, int bpm) {
     Player player = players.get(id);
     player.setHeartRate(bpm);
@@ -66,8 +72,22 @@ public class Game {
     } else if (players.size() == 1) {
       p.absorb(200);
     }
-    players.put(p.getName(), p);
+
+    players.put(p.getUuid(), p);
+    if (mode == GameMode.TEAMS) {
+      if (numTeam1 > numTeam2) {
+        numTeam2++;
+        p.setTeam(true);
+      } else {
+        numTeam1++;
+        p.setTeam(false);
+      }
+    }
   }
+
+  // set colours to corresponding teams
+  // take input to the game mode
+  // display the heartbeat data for each person
 
   public void generatePickups() {
     while (pickups.size() < MAX_PICKUPS) {
@@ -80,7 +100,6 @@ public class Game {
   }
 
   public void generatePickup(){
-    System.out.println("generating a pickup!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n");
     int point = 100;
     double max = 10.0;
     double radius;
@@ -104,8 +123,7 @@ public class Game {
     for (Player player1 : players.values()) {
       for (Player player2 : players.values()) {
         if (player1 == player2) {
-          continue;
-        } else if (player1.intersects(player2)) {
+        } else if (player1.intersects(player2) && (player1.getTeam() == null || player1.getTeam() != player2.getTeam())) {
           player1.duel(player2, TICK_RATE);
         }
       }
@@ -171,6 +189,6 @@ public class Game {
   }
 
   public synchronized void updatePlayerLocation(Player player) {
-    players.get(player.getName()).updateLocation(player.getCoord().latitude, player.getCoord().longitude);
+    players.get(player.getUuid()).updateLocation(player.getCoord().latitude, player.getCoord().longitude);
   }
 }

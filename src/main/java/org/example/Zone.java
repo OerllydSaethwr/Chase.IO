@@ -69,7 +69,7 @@ public class Zone {
 
   public Location getRandomLocation() {
     double minRadius = 20;
-    double randomRadius = radius * (Math.sqrt(1 + random.nextDouble())) + minRadius;
+    double randomRadius = radius * Math.sqrt(1 + random.nextDouble()) + minRadius;
     double theta = random.nextDouble() * 360;
 
     return Location.computeOffset(centre, randomRadius, theta);
