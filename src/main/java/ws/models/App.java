@@ -1,5 +1,6 @@
 package ws.models;
 
+import org.example.Game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class App {
   private static final Logger logger = LoggerFactory.getLogger(App.class);
 
-  public static void websocketMain(String[] args) {
+  public static void websocketMain() {
     // Pull the developer ID and API Key from environment variables
     String devId = "ichack-app-dev-7YeP5Bo6KC";
     String apiKey = "8133411e6cca957f0264dd5186acb47e27f54c1ab48911d4f58e798ffdbd5455";

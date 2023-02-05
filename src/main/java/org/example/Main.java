@@ -10,10 +10,11 @@ import ws.models.App;
 public class Main {
 
     public static void main(String[] args) {
-      App.websocketMain(args);
 
       Gson gson = new Gson();
-      Game game = new Game();
+      Game game = Game.getInstance();
+
+      App.websocketMain();
 
       GameEngine gameEngine = GameEngine.getInstance();
       gameEngine.setGame(game);
@@ -48,16 +49,17 @@ public class Main {
           return "400";
         }
       });
-
-      Spark.post("terra_webhook", (req, res) -> {
-        try {
-          gson.fromJson(req.body(), WebhookPayload.class);
-          System.out.println(req.body());
-          return "200";
-        } catch (Exception e) {
-          e.printStackTrace();
-          return "400";
-        }
-      });
+//
+//      Spark.post("terra_webhook", (req, res) -> {
+//        try {
+////          gson.fromJson(req.body(), WebhookPayload.class);
+//          System.out.println(req.body());
+//          System.out.println("getting here\n\n\n\n");
+//          return "200";
+//        } catch (Exception e) {
+//          e.printStackTrace();
+//          return "400";
+//        }
+//      });
     }
 }

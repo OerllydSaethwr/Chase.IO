@@ -10,6 +10,8 @@ public class Game {
 
   private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
 
+  private static final Game game = new Game();
+
   private final List<Pickup> pickups;
   private final List<Pickup> pickupsToDestroy;
   private final Map<String, Player> players;
@@ -26,20 +28,27 @@ public class Game {
 
   private long tick_id = 0;
 
-  public Game() {
+  public static Game getInstance() {
+    return game;
+  }
+
+  private Game() {
     this(DEFAULT_GAME_LENGTH);
   }
 
-  public Game(double secondsRemaining) {
+  private Game(double secondsRemaining) {
     this.pickups = new ArrayList<>();
     this.pickupsToDestroy = new ArrayList<>();
     this.players = new HashMap<>();
     this.random = new Random();
     this.zone = new Zone();
     this.secondsRemaining = secondsRemaining;
-
   }
 
+  public void setHeartRate(String id, int bpm) {
+    Player player = players.get(id);
+    player.setHeartRate(bpm);
+  }
 
   public Map<String, Player> getPlayers() {
     return players;
@@ -124,8 +133,6 @@ public class Game {
       }
   }
 
-
-
   public synchronized void tick() {
 
     logger.info("tick " + tick_id++);
@@ -141,6 +148,8 @@ public class Game {
     for (Player player : players.values()) {
       //player.updateLocation(0.0,0.0);
       player.claimPickups(pickups, this);
+      player.updatePoints();
+      player.passiveLoss();
     }
 
     int minPlayers = 1;
@@ -162,5 +171,4 @@ public class Game {
   public synchronized void updatePlayerLocation(Player player) {
     players.get(player.getName()).updateLocation(player.getCoord().latitude, player.getCoord().longitude);
   }
-
 }

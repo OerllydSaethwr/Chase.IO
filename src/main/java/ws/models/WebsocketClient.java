@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import okhttp3.*;
+import org.example.Game;
 import ws.models.Opcode;
 import ws.models.TokenResponseBody;
 import ws.models.WebsocketPayload;
@@ -226,20 +227,26 @@ public class WebsocketClient extends WebSocketListener {
 //      );
       logger.info("DISPATCH!!!!!");
       JsonNode dataNode = parsedPayload.getData();
-      System.out.println("sdjkfhsjkdfhjkahdfjkahsjkhadsjk");
+      String userID = parsedPayload.getUserId();
 
       JsonNode heatRateDataNode = dataNode.get("heart_rate_data");
       JsonNode heartRateSummaryNode = heatRateDataNode.get("summary");
       JsonNode avgHrBpmNode = heartRateSummaryNode.get("avg_hr_bpm");
       int bpm = avgHrBpmNode.asInt();
+      Game game = Game.getInstance();
+      game.setHeartRate(userID, bpm);
 
       logger.info("the heart rate is " + bpm);
 
+/*
       JsonNode movementDataNode = dataNode.get("movement_data");
+      logger.info("5");
       JsonNode avgSpeedMetersPerSecondNode = movementDataNode.get("avg_speed_meters_per_second");
+      logger.info("6");
       double avgSpeed = avgSpeedMetersPerSecondNode.asDouble();
 
       logger.info("the average speed is " + avgSpeed + " m/s");
+       */
 
       //map id of watch to the player
 
