@@ -1,6 +1,7 @@
 package org.example;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.UUID;
 
 public class Pickup {
     private final int points;
@@ -8,10 +9,13 @@ public class Pickup {
     @SerializedName("coordinate")
     private Location coord;
 
+    private String uuid;
+
     public Pickup (int points, double radius, Location coord) {
         this.points = points;
         this.radius = radius;
         this.coord = coord;
+        this.uuid = UUID.randomUUID().toString();
     }
 
     public int getPoints() {
@@ -24,9 +28,5 @@ public class Pickup {
 
     public Location getCoord() {
         return coord;
-    }
-
-    public void destroy() {
-
     }
 }

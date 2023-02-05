@@ -228,18 +228,18 @@ public class WebsocketClient extends WebSocketListener {
       JsonNode dataNode = parsedPayload.getData();
       System.out.println("sdjkfhsjkdfhjkahdfjkahsjkhadsjk");
 
-      logger.info("1");
-      //JsonNode heartDataNode = dataNode.get("heart_data");
-      //logger.info("2");
       JsonNode heatRateDataNode = dataNode.get("heart_rate_data");
-      logger.info("3");
       JsonNode heartRateSummaryNode = heatRateDataNode.get("summary");
-      logger.info("4");
-      JsonNode avgHrBpm = heartRateSummaryNode.get("avg_hr_bpm");
-      logger.info("5");
-      int bpm = avgHrBpm.asInt();
+      JsonNode avgHrBpmNode = heartRateSummaryNode.get("avg_hr_bpm");
+      int bpm = avgHrBpmNode.asInt();
 
       logger.info("the heart rate is " + bpm);
+
+      JsonNode movementDataNode = dataNode.get("movement_data");
+      JsonNode avgSpeedMetersPerSecondNode = movementDataNode.get("avg_speed_meters_per_second");
+      double avgSpeed = avgSpeedMetersPerSecondNode.asDouble();
+
+      logger.info("the average speed is " + avgSpeed + " m/s");
 
       //map id of watch to the player
 

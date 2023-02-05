@@ -12,9 +12,8 @@ public class Player {
   private String name;
   private double radius;
   private int points;
-  private static double INIT_SIZE = 20;
-  private static double POINT_THRESHHOLD = 50;
-  private static double MIN_HEARTRATE = 100;
+  private static final double INIT_SIZE = 20;
+  private static final double MIN_HEARTRATE = 100;
   private int heartRate;
   @SerializedName("coordinate")
   Location coord;
@@ -87,9 +86,9 @@ public class Player {
     updateRadius();
   }
 
-  public void passiveLoss(int tickRate) {
-//    if (points < POINT_THRESHHOLD && apiData.getHeartrate() < MIN_HEARTRATE) {
-//      points -= 1/tickRate;
+  public void passiveLoss() {
+//    if (apiData.getHeartrate() < MIN_HEARTRATE) {
+//      points *=  0.99;
 //    }
   }
   public Location getCoord() {

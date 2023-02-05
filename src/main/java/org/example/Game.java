@@ -1,16 +1,9 @@
 package org.example;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.*;
-import java.util.PriorityQueue;
 import java.util.Random;
-import org.example.core.GameEngine;
 import org.slf4j.LoggerFactory;
 
 public class Game {
@@ -23,6 +16,7 @@ public class Game {
   private final Random random;
 
   private double secondsRemaining;
+  private static final double DEFAULT_GAME_LENGTH = 60;
 
   private static final int TICK_RATE = 1;
 
@@ -32,13 +26,20 @@ public class Game {
 
   private long tick_id = 0;
 
-  public Game () {
+  public Game() {
+    this(DEFAULT_GAME_LENGTH);
+  }
+
+  public Game(double secondsRemaining) {
     this.pickups = new ArrayList<>();
     this.pickupsToDestroy = new ArrayList<>();
     this.players = new HashMap<>();
     this.random = new Random();
     this.zone = new Zone();
+    this.secondsRemaining = secondsRemaining;
+
   }
+
 
   public Map<String, Player> getPlayers() {
     return players;
@@ -63,6 +64,9 @@ public class Game {
     }
   }
 
+  public double getSecondsRemaining() {
+    return secondsRemaining;
+  }
 
   public void generatePickup(){
     System.out.println("generating a pickup!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n");

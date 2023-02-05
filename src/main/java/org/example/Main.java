@@ -1,20 +1,16 @@
 package org.example;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
 import org.example.core.GameEngine;
-import org.slf4j.LoggerFactory;
+import org.example.terra.WebhookPayload;
 import spark.Spark;
-import spark.Spark.*;
 import com.google.gson.*;
 import ws.models.App;
-
 
 public class Main {
 
     public static void main(String[] args) {
-      //App.websocketMain(args);
+      App.websocketMain(args);
 
       Gson gson = new Gson();
       Game game = new Game();
@@ -41,8 +37,23 @@ public class Main {
           Player player = gson.fromJson(req.body(), Player.class);
           game.updatePlayerLocation(player);
           game.updateTimestamps(player);
-          GameRespond gr = new GameRespond(new ArrayList<>(game.getPlayers().values()), game.getPickups());
+          GameRespond gr = new GameRespond(
+              new ArrayList<>(game.getPlayers().values()),
+              game.getPickups(),
+              game.getSecondsRemaining()
+          );
           return gson.toJson(gr, GameRespond.class);
+        } catch (Exception e) {
+          e.printStackTrace();
+          return "400";
+        }
+      });
+
+      Spark.post("terra_webhook", (req, res) -> {
+        try {
+          gson.fromJson(req.body(), WebhookPayload.class);
+          System.out.println(req.body());
+          return "200";
         } catch (Exception e) {
           e.printStackTrace();
           return "400";
