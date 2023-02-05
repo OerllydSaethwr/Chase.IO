@@ -17,6 +17,8 @@ public class Zone {
 
   public Zone() {
     this.random = new Random();
+    this.radius = 0;
+    this.centre = null;
   }
 
   public double getRadius() {
@@ -53,9 +55,8 @@ public class Zone {
   private void updateRadius(Location centre, Map<String, Player> players) {
     double radius = 0;
     for (Player p : players.values()) {
-      radius = Math.max(radius, centre.distanceTo(p.getCoord()));
+      radius = Math.max(radius, centre.distanceTo(p.getCoord()) + p.getRadius());
     }
-
     this.radius = radius;
   }
 
@@ -64,13 +65,13 @@ public class Zone {
     updateRadius(centre, players);
   }
 
+
+
   public Location getRandomLocation() {
-    double randomRadius = radius * Math.sqrt(random.nextDouble());
-    double theta = random.nextDouble() * 2 * PI;
+    double minRadius = 20;
+    double randomRadius = radius * (Math.sqrt(1 + random.nextDouble())) + minRadius;
+    double theta = random.nextDouble() * 360;
 
-    double latitude = centre.latitude + randomRadius * sin(theta);
-    double longitude = centre.longitude + randomRadius * cos(theta);
-
-    return new Location(latitude, longitude);
+    return Location.computeOffset(centre, randomRadius, theta);
   }
 }

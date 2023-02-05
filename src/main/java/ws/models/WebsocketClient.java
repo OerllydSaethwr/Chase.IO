@@ -197,7 +197,7 @@ public class WebsocketClient extends WebSocketListener {
   public void onMessage(@NotNull WebSocket socket, @NotNull String text) {
     System.out.println(text);
 
-    logger.debug("Raw message received: {}", text);
+//    logger.debug("Raw message received: {}", text);
     // Deserialise the payload from JSON into a java Object
     WebsocketPayload parsedPayload = objectMapper.readValue(text, WebsocketPayload.class);
 
@@ -221,17 +221,27 @@ public class WebsocketClient extends WebSocketListener {
       logger.info("Connection is READY");
     } else if (parsedPayload.getOpcode().equals(Opcode.DISPATCH)) {
       // We have been sent some data from a producer connection. Do any processing here
-      logger.info("Received DISPATCH payload for user ID {} of type {}. Data is: {}",
-          parsedPayload.getUserId(), parsedPayload.getEventType(), parsedPayload.getData().toString()
-      );
+//      logger.info("Received DISPATCH payload for user ID {} of type {}. Data is: {}",
+//          parsedPayload.getUserId(), parsedPayload.getEventType(), parsedPayload.getData().toString()
+//      );
+      logger.info("DISPATCH!!!!!");
       JsonNode dataNode = parsedPayload.getData();
-      JsonNode heartDataNode = dataNode.get("heart_data");
-      JsonNode heatRateDataNode = heartDataNode.get("heart_rate_data");
+      System.out.println("sdjkfhsjkdfhjkahdfjkahsjkhadsjk");
+
+      logger.info("1");
+      //JsonNode heartDataNode = dataNode.get("heart_data");
+      //logger.info("2");
+      JsonNode heatRateDataNode = dataNode.get("heart_rate_data");
+      logger.info("3");
       JsonNode heartRateSummaryNode = heatRateDataNode.get("summary");
+      logger.info("4");
       JsonNode avgHrBpm = heartRateSummaryNode.get("avg_hr_bpm");
+      logger.info("5");
       int bpm = avgHrBpm.asInt();
 
-      System.out.println("the heart rate is " + bpm);
+      logger.info("the heart rate is " + bpm);
+
+      //map id of watch to the player
 
     }
   }

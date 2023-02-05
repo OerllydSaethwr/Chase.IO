@@ -11,10 +11,11 @@ public class Player {
   @SerializedName("username")
   private String name;
   private double radius;
-  private double points;
-  private static double INIT_SIZE = 1;
+  private int points;
+  private static double INIT_SIZE = 20;
   private static double POINT_THRESHHOLD = 50;
   private static double MIN_HEARTRATE = 100;
+  private int heartRate;
   @SerializedName("coordinate")
   Location coord;
   private long timestamp;
@@ -22,7 +23,6 @@ public class Player {
   private String uuid;
 
   private FitnessData fitnessData;
-  private Date date = new Date();
 
   public Player(String name) {
     this.uuid = UUID.randomUUID().toString();
@@ -30,10 +30,10 @@ public class Player {
     this.points = 0;
     this.name = name;
 
-    this.timestamp = date.getTime();
+    this.timestamp = 0;
   }
 
-  public void claimPickups(List<Pickup> pickups, Game game) {
+  public synchronized void claimPickups(List<Pickup> pickups, Game game) {
     for (Pickup pickup : pickups) {
       if (coord.distanceTo(pickup.getCoord()) < radius) {
         claimPickup(pickup, game);
@@ -43,11 +43,11 @@ public class Player {
 
   private void claimPickup(Pickup pickup, Game game) {
     absorb(pickup.getPoints());
-    pickup.destroy();
-    game.generatePickup();
+    System.out.println("points is " + points);
+    game.willDestroy(pickup);
   }
 
-  private void absorb(double points) {
+  public void absorb(int points) {
     this.points += points;
     updateRadius();
   }
@@ -56,8 +56,8 @@ public class Player {
   }
 
   public boolean updateTimestamp() {
-    long ts = date.getTime();
-    if (ts - timestamp < 20000) {
+    long ts = new Date().getTime();
+    if (timestamp == 0 || ts - timestamp < 20000) {
       this.timestamp = ts;
       return true;
     }
@@ -80,7 +80,10 @@ public class Player {
   public long getTimstamp() {return timestamp;}
 
   public void takeDamage(double points) {
-    points -= points;
+    this.points -= points;
+    if (points < 0) {
+      this.points = 0;
+    }
     updateRadius();
   }
 
@@ -98,12 +101,16 @@ public class Player {
     return coord.distanceTo(player2.getCoord()) - radius < 0;
   }
 
-  public void duel (Player player2, double tickRate) {
+  public void duel (Player player2, int tickRate) {
     if (points > player2.getPoints()) {
-      double absorbAmount = radius / tickRate;
+      int absorbAmount = player2.getPoints() == 0 ? 0 : Math.max(1, (int) (player2.getPoints()/ 10) / tickRate);
       this.absorb(absorbAmount);
       player2.takeDamage(absorbAmount);
     }
+  }
+
+  public void setHeartRate(int heartRate) {
+    this.heartRate = heartRate;
   }
 
   public void updateLocation(double latitude, double longitude) {

@@ -14,7 +14,7 @@ import ws.models.App;
 public class Main {
 
     public static void main(String[] args) {
-      App.websocketMain(args);
+      //App.websocketMain(args);
 
       Gson gson = new Gson();
       Game game = new Game();
@@ -25,7 +25,7 @@ public class Main {
 
       Spark.post("/start_game", (req, res) -> {
         try {
-          System.out.println(req.body());
+          //System.out.println(req.body());
           Player player = gson.fromJson(req.body(), Player.class);
           game.addPlayer(player);
           return "200";
@@ -37,13 +37,14 @@ public class Main {
 
       Spark.post("/update_game", (req, res) -> {
         try {
-          System.out.println(req.body());
+//          System.out.println(req.body());
           Player player = gson.fromJson(req.body(), Player.class);
           game.updatePlayerLocation(player);
           game.updateTimestamps(player);
           GameRespond gr = new GameRespond(new ArrayList<>(game.getPlayers().values()), game.getPickups());
           return gson.toJson(gr, GameRespond.class);
         } catch (Exception e) {
+          e.printStackTrace();
           return "400";
         }
       });

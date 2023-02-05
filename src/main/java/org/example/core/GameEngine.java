@@ -1,8 +1,12 @@
 package org.example.core;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.example.Game;
+import org.slf4j.LoggerFactory;
 
 public class GameEngine extends Thread {
+  private static final org.slf4j.Logger logger = LoggerFactory.getLogger(GameEngine.class);
 
   private static final long TICK_INTERVAL_MS = 1000;
   private static final GameEngine gameEngine = new GameEngine();
@@ -25,10 +29,12 @@ public class GameEngine extends Thread {
 
   @Override
   public void run() {
+    logger.info("[OK] Game engine started");
     if (state == GameState.READY) {
+      state = GameState.RUNNING;
       runTick();
     } else {
-      throw new RuntimeException("Engine already running");
+      logger.warn("game is already ticking");
     }
   }
 
@@ -38,7 +44,9 @@ public class GameEngine extends Thread {
         game.tick();
         Thread.sleep(TICK_INTERVAL_MS);
       } catch (Exception e) {
-        System.out.println(e.getMessage());
+        // We should never get here. Burn everything if we do.
+        e.printStackTrace();
+        System.exit(2);
       }
     }
   }
