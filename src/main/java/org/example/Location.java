@@ -4,6 +4,7 @@ public class Location {
   public double longitude;
   public double latitude;
 
+
   // create and initialize a point with given name and
   // (latitude, longitude) specified in degrees
   public Location(double latitude, double longitude) {
