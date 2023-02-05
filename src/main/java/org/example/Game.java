@@ -132,10 +132,6 @@ public class Game {
     pickupsToDestroy.add(pickup);
   }
 
-  // public void destroyPickup(Pickup pickup) {
-  //   pickups.remove(pickup);
-  // }
-
   public void destroyClaimedPickups() {
     for (Pickup pickup : pickupsToDestroy) {
       pickups.remove(pickup);

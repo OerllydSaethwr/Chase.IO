@@ -158,7 +158,4 @@ public class Player {
       absorb(FIRE_BONUS);
     }
   }
-
-  // on each tick, update loction, passive update, check if inside someone, check if
-
 }

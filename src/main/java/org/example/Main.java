@@ -24,7 +24,6 @@ public class Main {
 
       Spark.post("/start_game", (req, res) -> {
         try {
-          //System.out.println(req.body());
           Player player = gson.fromJson(req.body(), Player.class);
           game.addPlayer(player);
           return "200";
@@ -36,7 +35,6 @@ public class Main {
 
       Spark.post("/update_game", (req, res) -> {
         try {
-//          System.out.println(req.body());
           Player player = gson.fromJson(req.body(), Player.class);
           game.updatePlayerLocation(player);
           game.updateTimestamps(player);
@@ -51,19 +49,5 @@ public class Main {
           return "400";
         }
       });
-//
-//      Spark.post("terra_webhook", (req, res) -> {
-//        try {
-////          gson.fromJson(req.body(), WebhookPayload.class);
-//          System.out.println(req.body());
-//          System.out.println("getting here\n\n\n\n");
-//          return "200";
-//        } catch (Exception e) {
-//          e.printStackTrace();
-//          return "400";
-//        }
-//      });
-
-
     }
 }
