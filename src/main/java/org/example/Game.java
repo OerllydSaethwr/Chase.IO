@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.*;
 import java.util.Random;
+import org.example.terra.GameMode;
 import org.slf4j.LoggerFactory;
 
 public class Game {
@@ -16,6 +17,7 @@ public class Game {
   private final List<Pickup> pickupsToDestroy;
   private final Map<String, Player> players;
   private final Random random;
+  private GameMode mode;
 
   private double secondsRemaining;
   private static final double DEFAULT_GAME_LENGTH = 60;

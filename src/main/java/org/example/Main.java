@@ -1,5 +1,7 @@
 package org.example;
 
+import com.theokanning.openai.OpenAiService;
+import com.theokanning.openai.completion.CompletionRequest;
 import java.util.ArrayList;
 import org.example.core.GameEngine;
 import org.example.terra.WebhookPayload;
@@ -13,12 +15,12 @@ public class Main {
 
       Gson gson = new Gson();
       Game game = Game.getInstance();
-
       App.websocketMain();
 
       GameEngine gameEngine = GameEngine.getInstance();
       gameEngine.setGame(game);
       gameEngine.start();
+
 
       Spark.post("/start_game", (req, res) -> {
         try {
@@ -61,5 +63,7 @@ public class Main {
 //          return "400";
 //        }
 //      });
+
+
     }
 }
